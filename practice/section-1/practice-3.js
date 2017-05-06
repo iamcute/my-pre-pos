@@ -19,9 +19,5 @@ function collectSameElements(collectionA, collectionB) {
 
   }
 
-  //console.log(result);
   return result;
 }
-var collectionA = ['a', 'e', 'h', 't', 'f', 'c', 'g', 'b', 'd'];
-var collectionB = collectionB = {value: ['a', 'd', 'e', 'f']};
-collectSameElements(collectionA, collectionB);

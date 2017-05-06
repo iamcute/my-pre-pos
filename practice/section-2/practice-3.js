@@ -1,65 +1,64 @@
 'use strict';
 
-function countSameElements(collection) {
-  var result = [{key:'a',count:0}];
-  var t=0;
+function isExist(result, colletion) {
+  var flag = -1;
 
-  var k=0;
-  for(var i=0;i<collection.length;i++){
-
-    if (result[t].key == collection[i].charAt(0)){
-
-      if(collection[i].length!=1){
-        for(var j=1;j<collection[i].length;j++){
-
-
-          if(isNaN((collection[i].charAt(j)))!=1){
-
-            if(collection[i].charAt(j-1)=='[') {
-
-              result[t].count += parseInt(collection[i].substring(j,collection.length));
-              j=collection[i].length;
-            }
-            else   result[t].count += parseInt(collection[i].charAt(j));
-          }
-        }
-      }
-      else result[t].count++;
-    }
-
-    else{
-      t++;
-      result[t] = new Object();
-      result[t].key = collection[i].charAt(0);
-      if(collection[i].length!=1){
-
-        for(var j=1;j<collection[i].length;j++){
-
-          if(isNaN((collection[i].charAt(j)))!=1){
-
-            if(collection[i].charAt(j-1)=='[') {
-
-              result[t].count = parseInt(collection[i].substring(j,collection.length));
-            }
-            else result[t].count = parseInt(collection[i].charAt(j));
-          }
-        }
-      }
-      else result[t].count = 1;
+  for (var i = 0; i < result.length; i++) {
+    if (result[i].name == colletion.charAt(0)) {
+      flag = i;
+      break;
     }
   }
-  //console.log(result);
+
+  if (flag >= 0) {
+    return flag;
+  }
+  else {
+    return -1;
+  }
+}
+
+function getCount(collection) {
+  var count;
+  var number = [];
+
+  if (collection.length != 1) {
+    for (var j = 1; j < collection.length; j++) {
+      if (isNaN((collection.charAt(j))) != 1) {
+
+        number.push(j);
+      }
+    }
+    count = parseInt(collection.substring(number[0], number[number.length - 1] + 1));
+
+  }
+  else count = 1;
+
+  return count;
+}
+
+function builtArray(result, collection) {
+
+  result.push({name: collection.charAt(0), summary: getCount(collection)});
+
   return result;
 }
-var collection = [
-  'a', 'a', 'a',
-  'e', 'e', 'e', 'e', 'e', 'e', 'e',
-  'h', 'h', 'h', 'h', 'h', 'h', 'h[3]', 'h', 'h',
-  't', 't-2', 't', 't', 't', 't', 't', 't', 't[10]',
-  'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f',
-  'c:8',
-  'g', 'g', 'g', 'g', 'g', 'g', 'g',
-  'b', 'b', 'b', 'b', 'b', 'b',
-  'd-5'
-];
-countSameElements(collection);
+
+function countSameElements(collection) {
+  var result = [{name: 'a', summary: 0}];
+  var t;
+
+  for (var i = 0; i < collection.length; i++) {
+    t = isExist(result, collection[i])
+
+    if (t >= 0) {
+
+      result[t].summary += getCount(collection[i]);
+    }
+    else {
+      result = builtArray(result, collection[i]);
+    }
+  }
+
+  return result;
+}
